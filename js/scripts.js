@@ -1,54 +1,36 @@
-var tickets = [];
-var movies = {
-batman: { showings: [ { time: "10:45", price: "$12.00"}, {"10:45" : "$12.00"}, {"12:05" :
-"$25.00"} ], rating: "PG"},
-wessyfilm: { showings: [ {time: "10:45", price: "$12.00"}, {"10:45" : "$12.00"}, {"12:05" :
-"$25.00"} ], rating: "R"}
-}
+var movies = { moth: { showings: [{time: "10:45", price: "$12.00"}, {time: "11:52", price: "$12.00"}, {time: "12:45", price: "$12.00"}], rating: "R", title: "Moth"}};
 
-function Ticket(time, price) {
-  // this.title = title;
-  this.time = time;
+function Ticket(title, rating, showTime, price) {
+  this.title = title;
+  this.rating = rating;
+  this.showtime = showTime;
   this.price = price;
-  // this.rating = rating;
 }
 
-function movieMatch(userMovie, userTime) {
-  debugger;
-  for (movie in movies) {
+function findMovieInfo(title, time) {
+  var ticketArray = [];
+  if (movies.hasOwnProperty(title)) {
+     var movie = movies[title];
+    //  var title = movie["title"];
+    //  var rating = movie['rating'];
+     var showings = movie['showings'];
+     ticketArray.push(movie["title"], movie['rating']);
 
-
-
-    if (movie === userMovie) {
-
-      var batman = movies[movie].showings;
-
-      console.log(batman);
-
-
-
-      batman.forEach(function(showing) {
-        // if (showing.time === userTime) {
-          var showTime = showing.time;
-          var showPrice = showing.price;
-          var newTicket = Ticket(showTime, showPrice);
-          tickets.push(newTicket);
-          console.log(tickets);
-        // }
-      });
-    }else {
-      alert("This movie doesn't exist");
-    }
+     showings.forEach(function(showing) {
+        if (time === showing["time"]) {
+        //  showTime = showing['time'];
+        //  price = showing['price'];
+         ticketArray.push(showing['time'], showing['price']);
+        }
+     });
+   console.log(ticketArray);
+   return ticketArray;
   }
+
 }
 
-// // # for movie in movies
-// //   # see if user input matches key
-// //     # if true puts the matching object into a ticket array/object
-// //   # once we have a matched object
-//     # we will see if user time intput matches a time in the movies time array
-//       # if matches take put in ticket obj/array
-//   # if user age is less 17 and movie rating is R, display warning abort ticket
+
+
 
 $(function() {
 
@@ -57,7 +39,20 @@ $(function() {
     var movie = $('#movie').val();
     var time = $('#time').val();
 
-    movieMatch(movie, time);
+    var info = findMovieInfo(movie, time);
+
+    var title = info[0];
+    var rating = info[1];
+    var showTime = info[2];
+    var price = info[3];
+
+    var ticket = new Ticket(title, rating, showTime, price);
+
+    $("#output").append("<h1>" + ticket.title + "</h1>", "<p>" + ticket.rating + "</p>", "<p>" + ticket.showtime + "</p>", "<p>" + ticket.price + "</p>");
+    $("#output").show();
+    $("#ticketForm").toggle();
+    console.log(ticket);
+
 
   });
 
